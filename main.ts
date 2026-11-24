@@ -11,5 +11,17 @@ const LINE_2 =
 
 const text = `${LINE_1}\n${LINE_2}\n`;
 
+// Self-check the gate before writing: exactly two non-blank lines,
+// UTF-8 text of 1–400 characters. Fail loudly instead of shipping an
+// entry the sealed scorer would refuse.
+const lines = text.split("\n").filter((l) => l.trim().length > 0);
+if (lines.length !== 2) {
+  throw new Error(`expected exactly 2 lines, got ${lines.length}`);
+}
+const chars = [...text.trim()].length;
+if (chars < 1 || chars > 400) {
+  throw new Error(`entry is ${chars} characters, outside the 1–400 gate`);
+}
+
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", text, "utf8");
